@@ -7,6 +7,9 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="fas fa-folder-open prefix light-blue-text text-darken-4"></i>
+                    <!-- in materialize select is renders select as an input and unordered list, and select is display: none
+                    In order to create validation for it, we need to change the display but make it invisible(width & height 0)
+                    and then apply styles when relevant events happen on the list -->
                     <select id="category_name" name="category_name" class="validate" required>
                         <option value="" disabled selected>Choose your option</option>
                         {% for category in categories %}
