@@ -111,22 +111,10 @@ def add_task():
 
 @app.route("/edit_task/<task_id>", methods=["GET", "POST"])
 def edit_task(task_id):
-    if request.method == "POST":
-        is_urgent = "on" if request.form.get("is_urgent") else "off"
-        task = {
-            "category": request.form.get("category_name"),
-            "task_name": request.form.get("task_name"),
-            "task_description": request.form.get("task_description"),
-            "is_urgent": is_urgent,
-            "due_date": request.form.get("due_date"),
-            "created_by": session["user"]
-        }
-        mongo.db.tasks.update_one()
-        flash("Task supdated added")
-        return redirect(url_for("get_tasks"))
-    task = mongo.db.categories.find_one({"_id": ObjectId(task_id)})
-    categories = list(mongo.db.categories.find().sort("category_name", 1))
-    return render_template("edit_task.html",task=task, categories=categories)
+    task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    return render_template("edit_task.html", task=task, categories=categories)
+
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
