@@ -134,6 +134,11 @@ def delete_task(task_id):
     flash("Task successfully deleted")
     return redirect(url_for("get_tasks"))
 
+@app.route("/categories", methods=["GET", "POST"])
+def categories():
+    categories = list(mongo.db.categories.find().sort("category_name", 1))
+    return render_template("categories.html", categories=categories)
+
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
