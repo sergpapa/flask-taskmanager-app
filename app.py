@@ -22,6 +22,16 @@ mongo = PyMongo(app)
 def get_tasks():
     tasks = list(mongo.db.tasks.find())   # cursor object can act like a list, but to be a proper list we need the list() method. otherwise it can be upacked only once in a template
     return render_template("tasks.html", tasks=tasks)
+    
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    # if I create my index here insead of the python interprepter
+    # I would need to immediatley delete it after fetching the results
+    # because if multiple users where using the app it would crash
+    # only one index can exist 
+    tasks = list(mongo.db.tasks.find({ "$text": {"$search": query} }))  # text index
+    return render_template("tasks.html", tasks=tasks)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
